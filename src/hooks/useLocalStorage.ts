@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 /**
  * useLocalStorage Hook
@@ -27,39 +27,26 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
    * storedValue - The current value stored in both state and localStorage
    * Initialized with initialValue for SSR compatibility
    */
-  const [storedValue, setStoredValue] = useState<T>(initialValue);
+  const [storedValue, setStoredValue] = useState<T>(() => {
+    // Try to get initial value from localStorage on client-side
+    if (typeof window !== "undefined") {
+      try {
+        const item = window.localStorage.getItem(key);
+        if (item) {
+          return JSON.parse(item);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    return initialValue;
+  });
 
   /**
    * isInitialized - Tracks whether we've successfully loaded from localStorage
-   * Prevents hydration mismatches by indicating when client-side data is ready
+   * For this implementation, we're always initialized since we load synchronously
    */
-  const [isInitialized, setIsInitialized] = useState(false);
-
-  // ============================================================================
-  // EFFECTS
-  // ============================================================================
-
-  /**
-   * Effect to load initial value from localStorage
-   * Runs only on the client after first render to avoid SSR issues
-   */
-  useEffect(() => {
-    try {
-      // Attempt to retrieve stored value from localStorage
-      const item = window.localStorage.getItem(key);
-      if (item) {
-        // Parse and set the stored value if it exists
-        setStoredValue(JSON.parse(item));
-      }
-      // Note: If no item exists, we keep the initialValue
-    } catch (error) {
-      // Handle any localStorage errors (quota exceeded, corrupted data, etc.)
-      console.log(error);
-    }
-
-    // Mark initialization as complete
-    setIsInitialized(true);
-  }, [key]); // Re-run if key changes (though unlikely in practice)
+  const isInitialized = typeof window !== "undefined";
 
   // ============================================================================
   // UTILITY FUNCTIONS
