@@ -83,8 +83,8 @@ export default function MobileDashboard() {
       return;
     }
 
-    // Update history: add to front, keep only last 20 entries
-    const newHistory = [num, ...history].slice(0, 20);
+    // Update history: add to front, keep only last 30 entries
+    const newHistory = [num, ...history].slice(0, 30);
     setHistory(newHistory);
 
     // Reset UI state
@@ -100,6 +100,20 @@ export default function MobileDashboard() {
    */
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") handleAdd();
+  };
+
+  /**
+   * handleUndo - Removes the most recently added number from history
+   *
+   * Removes the first element from the history array
+   * Recalculates the top 9 numbers for highlighting
+   * Only available when history is not empty
+   */
+  const handleUndo = () => {
+    if (history.length > 0) {
+      const newHistory = history.slice(1);
+      setHistory(newHistory);
+    }
   };
 
   // ============================================================================
@@ -139,6 +153,8 @@ export default function MobileDashboard() {
         inputValue={inputValue}
         setInputValue={setInputValue}
         handleAdd={handleAdd}
+        handleUndo={handleUndo}
+        isUndoDisabled={history.length === 0}
         handleKeyDown={handleKeyDown}
         inputRef={inputRef}
       />

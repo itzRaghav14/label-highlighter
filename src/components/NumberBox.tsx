@@ -36,7 +36,7 @@ export function NumberBox({ number, isActive, className }: NumberBoxProps) {
         // Conditional styling based on active state
         // Active State (Glowy)
         isActive
-          ? "bg-indigo-600 border-indigo-400 text-white shadow-[0_0_15px_rgba(99,102,241,0.6)] z-10 scale-102"
+          ? "bg-indigo-600 border-indigo-400 text-white shadow-[0_0_15px_rgba(99,102,241,0.6)] z-10"
           : // Inactive State (Outlined)
             "bg-transparent border-neutral-700 text-neutral-500 hover:border-neutral-500",
         className // Allow additional custom classes
