@@ -9,6 +9,8 @@ import { NumberBox } from "./NumberBox";
 interface NumberGridProps {
   /** Set of numbers that should be visually highlighted as active */
   top9Numbers: Set<number>;
+  /** Callback when a number is clicked */
+  onNumberClick?: (number: number) => void;
 }
 
 /**
@@ -24,7 +26,7 @@ interface NumberGridProps {
  * - Responsive design with proper spacing
  * - Smooth spring-based animations
  */
-export function NumberGrid({ top9Numbers }: NumberGridProps) {
+export function NumberGrid({ top9Numbers, onNumberClick }: NumberGridProps) {
   /**
    * Container animation variants for the entire grid
    * Controls the staggered entrance of all number boxes
@@ -77,6 +79,7 @@ export function NumberGrid({ top9Numbers }: NumberGridProps) {
           <NumberBox
             number={0}
             isActive={top9Numbers.has(0)}
+            onClick={onNumberClick}
           />
         </motion.div>
 
@@ -86,6 +89,7 @@ export function NumberGrid({ top9Numbers }: NumberGridProps) {
             <NumberBox
               number={num}
               isActive={top9Numbers.has(num)}
+              onClick={onNumberClick}
             />
           </motion.div>
         ))}

@@ -93,6 +93,29 @@ export default function MobileDashboard() {
   };
 
   /**
+   * handleAddNumber - Adds a number directly to history (from grid click)
+   *
+   * Validates input:
+   * - Must be between 0-36 (inclusive)
+   *
+   * Updates history:
+   * - Adds new number to the beginning of the array
+   * - Limits history to last 20 entries to prevent memory issues
+   * - Persists to localStorage via setHistory
+   */
+  const handleAddNumber = (num: number) => {
+    // Input validation
+    if (num < 0 || num > 36) {
+      alert("Invalid number");
+      return;
+    }
+
+    // Update history: add to front, keep only last 20 entries
+    const newHistory = [num, ...history].slice(0, 20);
+    setHistory(newHistory);
+  };
+
+  /**
    * handleKeyDown - Handles keyboard input for the number input field
    *
    * Triggers number addition when Enter key is pressed
@@ -166,7 +189,7 @@ export default function MobileDashboard() {
         <HistoryQueue history={history} />
 
         {/* RIGHT COLUMN: The Grid (Col Span 9) */}
-        <NumberGrid top9Numbers={top9Numbers} />
+        <NumberGrid top9Numbers={top9Numbers} onNumberClick={handleAddNumber} />
 
       </div>
 

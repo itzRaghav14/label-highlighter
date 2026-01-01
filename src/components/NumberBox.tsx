@@ -13,6 +13,8 @@ interface NumberBoxProps {
   isActive: boolean;
   /** Additional CSS classes to apply */
   className?: string;
+  /** Callback when the number is clicked */
+  onClick?: (number: number) => void;
 }
 
 /**
@@ -28,11 +30,11 @@ interface NumberBoxProps {
  * - Responsive design with consistent sizing
  * - Accessibility-friendly with proper contrast
  */
-export function NumberBox({ number, isActive, className }: NumberBoxProps) {
+export function NumberBox({ number, isActive, className, onClick }: NumberBoxProps) {
   return (
     <motion.div
       className={cn(
-        "h-9 flex items-center justify-center rounded-md text-sm font-bold border transition-all duration-300",
+        "h-9 flex items-center justify-center rounded-md text-sm font-bold border transition-all duration-300 cursor-pointer",
         // Conditional styling based on active state
         // Active State (Glowy)
         isActive
@@ -41,6 +43,7 @@ export function NumberBox({ number, isActive, className }: NumberBoxProps) {
             "bg-transparent border-neutral-700 text-neutral-500 hover:border-neutral-500",
         className // Allow additional custom classes
       )}
+      onClick={() => onClick?.(number)}
       animate={isActive ? {
         scale: [1, 1.08, 1.02], // Pulsing scale animation
         boxShadow: [
