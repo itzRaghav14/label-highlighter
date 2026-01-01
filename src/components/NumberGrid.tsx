@@ -73,11 +73,10 @@ export function NumberGrid({ top9Numbers }: NumberGridProps) {
         animate="show"
       >
         {/* Box 0: Spans full width (col-span-3) */}
-        <motion.div variants={itemVariants}>
+        <motion.div variants={itemVariants} className="col-span-3">
           <NumberBox
             number={0}
             isActive={top9Numbers.has(0)}
-            className="col-span-3" // Spans all 3 columns of the grid
           />
         </motion.div>
 
