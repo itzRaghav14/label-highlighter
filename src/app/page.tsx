@@ -61,7 +61,7 @@ export default function MobileDashboard() {
    *
    * Updates history:
    * - Adds new number to the beginning of the array
-   * - Limits history to last 20 entries to prevent memory issues
+   * - Limits history to last 30 entries to prevent memory issues
    * - Persists to localStorage via setHistory
    *
    * Side effects:
@@ -83,8 +83,8 @@ export default function MobileDashboard() {
       return;
     }
 
-    // Update history: add to front, keep only last 20 entries
-    const newHistory = [num, ...history].slice(0, 20);
+    // Update history: add to front, keep only last 30 entries
+    const newHistory = [num, ...history].slice(0, 30);
     setHistory(newHistory);
 
     // Reset UI state
@@ -100,7 +100,7 @@ export default function MobileDashboard() {
    *
    * Updates history:
    * - Adds new number to the beginning of the array
-   * - Limits history to last 20 entries to prevent memory issues
+   * - Limits history to last 30 entries to prevent memory issues
    * - Persists to localStorage via setHistory
    */
   const handleAddNumber = (num: number) => {
@@ -110,8 +110,8 @@ export default function MobileDashboard() {
       return;
     }
 
-    // Update history: add to front, keep only last 20 entries
-    const newHistory = [num, ...history].slice(0, 20);
+    // Update history: add to front, keep only last 30 entries
+    const newHistory = [num, ...history].slice(0, 30);
     setHistory(newHistory);
   };
 
@@ -186,7 +186,7 @@ export default function MobileDashboard() {
       <div className="flex-1 px-4 py-2 grid grid-cols-12 gap-2 max-w-md mx-auto w-full h-full overflow-hidden">
 
         {/* LEFT COLUMN: History Queue (Col Span 3) */}
-        <HistoryQueue history={history} />
+        <HistoryQueue history={history.slice(0, 20)} />
 
         {/* RIGHT COLUMN: The Grid (Col Span 9) */}
         <NumberGrid top9Numbers={top9Numbers} onNumberClick={handleAddNumber} />
