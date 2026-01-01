@@ -83,8 +83,8 @@ export default function MobileDashboard() {
       return;
     }
 
-    // Update history: add to front, keep only last 30 entries
-    const newHistory = [num, ...history].slice(0, 30);
+    // Update history: add to front, keep only last 20 entries
+    const newHistory = [num, ...history].slice(0, 20);
     setHistory(newHistory);
 
     // Reset UI state
