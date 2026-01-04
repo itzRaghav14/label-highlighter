@@ -11,6 +11,8 @@ interface NumberBoxProps {
   number: number;
   /** Whether this number should be visually highlighted as active */
   isActive: boolean;
+  /** The color to use for highlighting */
+  highlightColor?: "emerald" | "red" | "blue";
   /** Additional CSS classes to apply */
   className?: string;
   /** Callback when the number is clicked */
@@ -24,42 +26,76 @@ interface NumberBoxProps {
  * Shows different visual states for active vs inactive numbers.
  *
  * Features:
- * - Active state: Emerald glow with pulsing animation and scaling
+ * - Active state: Colored glow with pulsing animation and scaling
  * - Inactive state: Neutral styling with subtle hover effects
  * - Smooth transitions between states
  * - Responsive design with consistent sizing
  * - Accessibility-friendly with proper contrast
  */
-export function NumberBox({ number, isActive, className, onClick }: NumberBoxProps) {
+export function NumberBox({
+  number,
+  isActive,
+  highlightColor = "emerald",
+  className,
+  onClick,
+}: NumberBoxProps) {
+  const colorConfig = {
+    emerald: {
+      classes: "bg-emerald-600 border-emerald-400 text-emerald-600 shadow-[0_0_15px_rgba(16,185,129,0.6)] z-10",
+      shadow: [
+        "0 0 15px rgba(16,185,129,0.6)",
+        "0 0 25px rgba(16,185,129,0.8)",
+        "0 0 15px rgba(16,185,129,0.6)",
+      ],
+    },
+    red: {
+      classes: "bg-red-600 border-red-400 text-white shadow-[0_0_15px_rgba(220,38,38,0.6)] z-10",
+      shadow: [
+        "0 0 15px rgba(220,38,38,0.6)",
+        "0 0 25px rgba(220,38,38,0.8)",
+        "0 0 15px rgba(220,38,38,0.6)",
+      ],
+    },
+    blue: {
+      classes: "bg-blue-600 border-blue-400 text-white shadow-[0_0_15px_rgba(37,99,235,0.6)] z-10",
+      shadow: [
+        "0 0 15px rgba(37,99,235,0.6)",
+        "0 0 25px rgba(37,99,235,0.8)",
+        "0 0 15px rgba(37,99,235,0.6)",
+      ],
+    },
+  };
+
+  const activeConfig = colorConfig[highlightColor];
+
   return (
     <motion.div
       className={cn(
         "h-9 flex items-center justify-center rounded-md text-sm font-bold border transition-all duration-300 cursor-pointer",
         // Conditional styling based on active state
-        // Active State (Glowy) - Emerald glow: rgba(16,185,129,0.6) is emerald-500 at 60% opacity
         isActive
-          ? "bg-emerald-600 border-emerald-400 text-white shadow-[0_0_15px_rgba(16,185,129,0.6)] z-10"
+          ? activeConfig.classes
           : // Inactive State (Outlined)
             "bg-transparent border-neutral-700 text-neutral-500 hover:border-neutral-500",
         className // Allow additional custom classes
       )}
       onClick={() => onClick?.(number)}
-      animate={isActive ? {
-        scale: [1, 1.08, 1.02], // Pulsing scale animation
-        boxShadow: [
-          "0 0 15px rgba(16,185,129,0.6)", // Start glow (emerald-500 at 60% opacity)
-          "0 0 25px rgba(16,185,129,0.8)", // Peak glow (emerald-500 at 80% opacity)
-          "0 0 15px rgba(16,185,129,0.6)"  // Return to start (emerald-500 at 60% opacity)
-        ]
-      } : {
-        scale: 1, // Reset to normal scale
-        boxShadow: "0 0 0px rgba(16,185,129,0)" // Remove glow (transparent emerald)
-      }}
+      animate={
+        isActive
+          ? {
+              scale: [1, 1.08, 1.02], // Pulsing scale animation
+              boxShadow: activeConfig.shadow,
+            }
+          : {
+              scale: 1, // Reset to normal scale
+              boxShadow: "0 0 0px rgba(0,0,0,0)", // Remove glow
+            }
+      }
       transition={{
         duration: 0.8, // Animation duration
         ease: "easeInOut", // Smooth easing
         repeat: isActive ? Infinity : 0, // Infinite repeat only when active
-        repeatType: "reverse" // Reverse direction for smooth loop
+        repeatType: "reverse", // Reverse direction for smooth loop
       }}
       whileHover={{
         scale: isActive ? 1.08 : 1.02, // Enhanced hover scale
