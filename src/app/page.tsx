@@ -36,6 +36,8 @@ export default function MobileDashboard() {
    * Automatically loads from localStorage on mount
    */
   const { storedValue: history, setValue: setHistory, isLoaded } = useLocalStorage<number[]>("roulette-history", []);
+  const { storedValue: redInputs, setValue: setRedInputs } = useLocalStorage<string[]>("red-inputs", Array(4).fill(""));
+  const { storedValue: indigoInputs, setValue: setIndigoInputs } = useLocalStorage<string[]>("indigo-inputs", Array(4).fill(""));
 
   /**
    * Input field state - controlled input for number entry
@@ -50,6 +52,32 @@ export default function MobileDashboard() {
   // ============================================================================
   // BUSINESS LOGIC FUNCTIONS
   // ============================================================================
+
+  /**
+   * handleHighlightChange - Updates state for the highlight input fields
+   *
+   * @param color - The color set to modify ('red' or 'indigo')
+   * @param index - The index of the input field within its row (0-3)
+   * @param value - The new string value from the input field
+   */
+  const handleHighlightChange = (
+    color: "red" | "indigo",
+    index: number,
+    value: string
+  ) => {
+    // Restrict input to numbers only and limit length
+    const sanitizedValue = value.replace(/[^0-9]/g, "").slice(0, 2);
+
+    if (color === "red") {
+      const newInputs = [...redInputs];
+      newInputs[index] = sanitizedValue;
+      setRedInputs(newInputs);
+    } else {
+      const newInputs = [...indigoInputs];
+      newInputs[index] = sanitizedValue;
+      setIndigoInputs(newInputs);
+    }
+  };
 
   /**
    * handleAdd - Processes user input and adds number to history
@@ -152,6 +180,26 @@ export default function MobileDashboard() {
    */
   const top9Numbers = new Set(history.slice(0, 9));
 
+  /**
+   * redNumbers - Set of numbers to be highlighted in red
+   * Derived from the red input fields
+   */
+  const redNumbers = new Set(
+    redInputs
+      .map((v) => parseInt(v, 10))
+      .filter((n) => !isNaN(n) && n >= 0 && n <= 36)
+  );
+
+  /**
+   * indigoNumbers - Set of numbers to be highlighted in indigo
+   * Derived from the indigo input fields
+   */
+  const indigoNumbers = new Set(
+    indigoInputs
+      .map((v) => parseInt(v, 10))
+      .filter((n) => !isNaN(n) && n >= 0 && n <= 36)
+  );
+
   // ============================================================================
   // LOADING STATE
   // ============================================================================
@@ -180,6 +228,9 @@ export default function MobileDashboard() {
         isUndoDisabled={history.length === 0}
         handleKeyDown={handleKeyDown}
         inputRef={inputRef}
+        redInputs={redInputs}
+        indigoInputs={indigoInputs}
+        onHighlightChange={handleHighlightChange}
       />
 
       {/* SECTION 2 & 3: Main Layout (Split Screen) */}
@@ -189,7 +240,12 @@ export default function MobileDashboard() {
         <HistoryQueue history={history.slice(0, 20)} />
 
         {/* RIGHT COLUMN: The Grid (Col Span 9) */}
-        <NumberGrid top9Numbers={top9Numbers} onNumberClick={handleAddNumber} />
+        <NumberGrid
+          top9Numbers={top9Numbers}
+          redNumbers={redNumbers}
+          indigoNumbers={indigoNumbers}
+          onNumberClick={handleAddNumber}
+        />
 
       </div>
 

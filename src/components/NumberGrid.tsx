@@ -7,8 +7,12 @@ import { NumberBox } from "./NumberBox";
  * Defines the props required by the NumberGrid component
  */
 interface NumberGridProps {
-  /** Set of numbers that should be visually highlighted as active */
+  /** Set of numbers that should be visually highlighted as active (emerald) */
   top9Numbers: Set<number>;
+  /** Set of numbers to be highlighted in red */
+  redNumbers: Set<number>;
+  /** Set of numbers to be highlighted in indigo */
+  indigoNumbers: Set<number>;
   /** Callback when a number is clicked */
   onNumberClick?: (number: number) => void;
 }
@@ -20,13 +24,18 @@ interface NumberGridProps {
  * Number 0 spans the full first row, while 1-36 are arranged in a 3-column grid.
  *
  * Features:
+ * - Multi-color highlighting (red, indigo, emerald)
  * - Special layout: 0 spans full width, 1-36 in 3 columns
  * - Staggered entrance animations for visual appeal
- * - Active numbers (from top9Numbers) get glow effects
  * - Responsive design with proper spacing
  * - Smooth spring-based animations
  */
-export function NumberGrid({ top9Numbers, onNumberClick }: NumberGridProps) {
+export function NumberGrid({
+  top9Numbers,
+  redNumbers,
+  indigoNumbers,
+  onNumberClick,
+}: NumberGridProps) {
   /**
    * Container animation variants for the entire grid
    * Controls the staggered entrance of all number boxes
@@ -60,6 +69,25 @@ export function NumberGrid({ top9Numbers, onNumberClick }: NumberGridProps) {
     },
   };
 
+  /**
+   * Determines the highlight props for a given number based on precedence.
+   * Precedence: Red > Indigo > Emerald (top 9)
+   * @param num The number to check
+   * @returns Props for NumberBox (isActive, highlightColor)
+   */
+  const getHighlightProps = (num: number) => {
+    if (redNumbers.has(num)) {
+      return { isActive: true, highlightColor: "red" as const };
+    }
+    if (indigoNumbers.has(num)) {
+      return { isActive: true, highlightColor: "indigo" as const };
+    }
+    if (top9Numbers.has(num)) {
+      return { isActive: true, highlightColor: "emerald" as const };
+    }
+    return { isActive: false };
+  };
+
   return (
     <motion.div
       className="col-span-9 bg-neutral-900/30 border border-neutral-800 rounded-2xl p-2 h-fit"
@@ -78,7 +106,7 @@ export function NumberGrid({ top9Numbers, onNumberClick }: NumberGridProps) {
         <motion.div variants={itemVariants} className="col-span-3">
           <NumberBox
             number={0}
-            isActive={top9Numbers.has(0)}
+            {...getHighlightProps(0)}
             onClick={onNumberClick}
           />
         </motion.div>
@@ -88,7 +116,7 @@ export function NumberGrid({ top9Numbers, onNumberClick }: NumberGridProps) {
           <motion.div key={num} variants={itemVariants}>
             <NumberBox
               number={num}
-              isActive={top9Numbers.has(num)}
+              {...getHighlightProps(num)}
               onClick={onNumberClick}
             />
           </motion.div>

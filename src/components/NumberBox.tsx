@@ -12,7 +12,7 @@ interface NumberBoxProps {
   /** Whether this number should be visually highlighted as active */
   isActive: boolean;
   /** The color to use for highlighting */
-  highlightColor?: "emerald" | "red" | "blue";
+  highlightColor?: "emerald" | "red" | "indigo";
   /** Additional CSS classes to apply */
   className?: string;
   /** Callback when the number is clicked */
@@ -56,12 +56,12 @@ export function NumberBox({
         "0 0 15px rgba(220,38,38,0.6)",
       ],
     },
-    blue: {
-      classes: "bg-blue-600 border-blue-400 text-white shadow-[0_0_15px_rgba(37,99,235,0.6)] z-10",
+    indigo: {
+      classes: "bg-indigo-600 border-indigo-400 text-white shadow-[0_0_15px_rgba(79,70,229,0.6)] z-10",
       shadow: [
-        "0 0 15px rgba(37,99,235,0.6)",
-        "0 0 25px rgba(37,99,235,0.8)",
-        "0 0 15px rgba(37,99,235,0.6)",
+        "0 0 15px rgba(79,70,229,0.6)",
+        "0 0 25px rgba(79,70,229,0.8)",
+        "0 0 15px rgba(79,70,229,0.6)",
       ],
     },
   };
