@@ -57,16 +57,17 @@ export function Header({ inputValue, setInputValue, handleAdd, handleUndo, isUnd
           onChange={(e) => setInputValue(e.target.value)}
           onKeyDown={handleKeyDown} // Handle Enter key press
           placeholder="0-36"
-          className="flex-1 bg-neutral-900 border border-neutral-700 rounded-xl px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all placeholder:text-neutral-600"
+          className="flex-1 bg-neutral-900 border border-neutral-700 rounded-xl px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all placeholder:text-neutral-600"
           whileFocus={{ scale: 1.02 }} // Subtle scale animation on focus
           transition={{ duration: 0.2 }}
         />
 
         {/* Add Button */}
+        {/* Emerald glow shadow: rgba(16,185,129,0.4) is emerald-500 at 40% opacity */}
         <motion.button
           onClick={handleAdd} // Trigger number addition
-          className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 rounded-xl font-bold shadow-[0_0_15px_rgba(79,70,229,0.4)] active:scale-95 transition-all flex items-center justify-center"
-          whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(79,70,229,0.6)" }} // Enhanced glow on hover
+          className="bg-emerald-600 hover:bg-emerald-500 text-white px-4 rounded-xl font-bold shadow-[0_0_15px_rgba(16,185,129,0.4)] active:scale-95 transition-all flex items-center justify-center"
+          whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(16,185,129,0.6)" }} // Enhanced emerald glow on hover: rgba(16,185,129,0.6) is emerald-500 at 60% opacity
           whileTap={{ scale: 0.95 }} // Press feedback
           initial={{ scale: 0.9 }} // Start slightly smaller
           animate={{ scale: 1 }} // Animate to full size

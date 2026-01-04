@@ -24,7 +24,7 @@ interface NumberBoxProps {
  * Shows different visual states for active vs inactive numbers.
  *
  * Features:
- * - Active state: Indigo glow with pulsing animation and scaling
+ * - Active state: Emerald glow with pulsing animation and scaling
  * - Inactive state: Neutral styling with subtle hover effects
  * - Smooth transitions between states
  * - Responsive design with consistent sizing
@@ -36,9 +36,9 @@ export function NumberBox({ number, isActive, className, onClick }: NumberBoxPro
       className={cn(
         "h-9 flex items-center justify-center rounded-md text-sm font-bold border transition-all duration-300 cursor-pointer",
         // Conditional styling based on active state
-        // Active State (Glowy)
+        // Active State (Glowy) - Emerald glow: rgba(16,185,129,0.6) is emerald-500 at 60% opacity
         isActive
-          ? "bg-indigo-600 border-indigo-400 text-white shadow-[0_0_15px_rgba(99,102,241,0.6)] z-10"
+          ? "bg-emerald-600 border-emerald-400 text-white shadow-[0_0_15px_rgba(16,185,129,0.6)] z-10"
           : // Inactive State (Outlined)
             "bg-transparent border-neutral-700 text-neutral-500 hover:border-neutral-500",
         className // Allow additional custom classes
@@ -47,13 +47,13 @@ export function NumberBox({ number, isActive, className, onClick }: NumberBoxPro
       animate={isActive ? {
         scale: [1, 1.08, 1.02], // Pulsing scale animation
         boxShadow: [
-          "0 0 15px rgba(99,102,241,0.6)", // Start glow
-          "0 0 25px rgba(99,102,241,0.8)", // Peak glow
-          "0 0 15px rgba(99,102,241,0.6)"  // Return to start
+          "0 0 15px rgba(16,185,129,0.6)", // Start glow (emerald-500 at 60% opacity)
+          "0 0 25px rgba(16,185,129,0.8)", // Peak glow (emerald-500 at 80% opacity)
+          "0 0 15px rgba(16,185,129,0.6)"  // Return to start (emerald-500 at 60% opacity)
         ]
       } : {
         scale: 1, // Reset to normal scale
-        boxShadow: "0 0 0px rgba(99,102,241,0)" // Remove glow
+        boxShadow: "0 0 0px rgba(16,185,129,0)" // Remove glow (transparent emerald)
       }}
       transition={{
         duration: 0.8, // Animation duration
